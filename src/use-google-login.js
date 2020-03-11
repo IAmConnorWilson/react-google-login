@@ -55,9 +55,15 @@ const useGoogleLogin = ({
       }
       onRequest()
       if (responseType === 'code') {
-        auth2.grantOfflineAccess(options).then(res => onSuccess(res), err => onFailure(err))
+        auth2.grantOfflineAccess(options).then(
+          res => onSuccess(res),
+          err => onFailure(err)
+        )
       } else {
-        auth2.signIn(options).then(res => handleSigninSuccess(res), err => onFailure(err))
+        auth2.signIn(options).then(
+          res => handleSigninSuccess(res),
+          err => onFailure(err)
+        )
       }
     }
   }
@@ -82,16 +88,18 @@ const useGoogleLogin = ({
       }
 
       window.gapi.load('auth2', () => {
-        setLoaded(true)
         if (!window.gapi.auth2.getAuthInstance()) {
           window.gapi.auth2.init(params).then(
             res => {
+              setLoaded(true)
               if (isSignedIn && res.isSignedIn.get()) {
                 handleSigninSuccess(res.currentUser.get())
               }
             },
             err => onFailure(err)
           )
+        } else {
+          setLoaded(true)
         }
       })
     })
